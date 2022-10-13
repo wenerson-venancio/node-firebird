@@ -15,7 +15,7 @@ app.use(cors());
 app.get("/produtos", function (req, res) {
 
 
-	executeQuery("SELECT * FROM testgrupo", [], function (err, result) {
+	executeQuery("SELECT * FROM TESTPRODUTO", [], function (err, result) {
 
 
 		if (err) {
