@@ -1,8 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { dbOptions } from "./config/database.js";
-import firebird from "node-firebird";
-
+import { executeQuery } from "./config/database.js";
 
 
 const app = express();
@@ -16,28 +14,21 @@ app.use(cors());
 //Rotas
 app.get("/produtos", function (req, res) {
 
-	firebird.attach(dbOptions, function (err, db) {
 
-		if (err)
-			return res.status(500).json(err);
+	executeQuery("SELECT * FROM testgrupo", [], function (err, result) {
 
-		//db Database
-		db.query('SELECT * FROM TESTGRUPO', function (err, result) {
 
-			//IMPORTANT: Close conecction
-			db.detach();
+		if (err) {
+			res.status(500).json(err);
+		} else {
+			res.status(200).json(result);
 
-			if (err) {
-				return res.status(200).json(err);
-			} else {
-				return res.status(200).json(result);
-			}
+		}
 
-		})
-	})
+	});
 
 });
 
 app.listen(3000, function () {
 	console.log("Servidor no ar")
-}) 
+});

@@ -1,3 +1,5 @@
+import firebird from "node-firebird";
+
 
 const dbOptions = {
 	host: 'localhost',
@@ -10,4 +12,31 @@ const dbOptions = {
 	pageSize: 4096
 }
 
-export { dbOptions };
+function executeQuery(ssql, params, callback) {
+
+
+	firebird.attach(dbOptions, function (err, db) {
+
+		if (err)
+			return callback(err, []);
+
+		//db Database
+		db.query(ssql, params, function (err, result) {
+
+
+			db.detach(); //IMPORTANT: Close conecction
+
+
+			if (err) {
+				return callback(err, []);
+			} else {
+
+				return callback(result);
+			}
+
+		});
+	});
+
+}
+
+export { executeQuery };
